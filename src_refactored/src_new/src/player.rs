@@ -7,11 +7,12 @@ pub enum Player {
 }
 
 impl Player {
-    pub fn switch(&mut self) {
+    pub fn switch(&mut self) -> Player{ // i made it so it returns itself after changing idk if it changes anything
         *self = match self {
             Self::Cross => Self::Circle,
             Self::Circle => Self::Cross
-        }
+        };
+        *self
     }
 }
 
