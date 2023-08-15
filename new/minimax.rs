@@ -35,11 +35,12 @@ pub fn evaluate_board<B: Board<Error>>(board: &B, player: Player) -> i32 {
             score += evaluate_sequence(board, row, col, player, opponent);
         }
     }
-    
+
     score
 }
 
-fn evaluate_sequence<B: Board<Error>>(// i have no idea if this works or not
+fn evaluate_sequence<B: Board<Error>>(
+    // i have no idea if this works or not
     board: &B,
     row: usize,
     col: usize,
@@ -72,11 +73,7 @@ fn evaluate_sequence<B: Board<Error>>(// i have no idea if this works or not
     score
 }
 
-pub fn minimax<B: Board<Error>>(
-    board: &mut B,
-    max_depth: usize,
-    mut current_player: Player,
-) -> (i32, Option<usize>) {
+pub fn minimax<B: Board<Error>>(board: &mut B, max_depth: usize, mut current_player: Player) -> (i32, Option<usize>) {
     let mut best_move = None;
     let mut best_eval = std::i32::MIN;
 
@@ -84,7 +81,12 @@ pub fn minimax<B: Board<Error>>(
         if board.is_valid(col).unwrap() {
             let mut board_copy = board.clone();
             if let Ok(_) = board_copy.make_move(col, current_player) {
-                let eval = minimax_recursive(&mut board_copy, max_depth - 1, current_player.switch(), best_eval);
+                let eval = minimax_recursive(
+                    &mut board_copy,
+                    max_depth - 1,
+                    current_player.switch(),
+                    best_eval
+                );
 
                 if eval > best_eval {
                     best_eval = eval;
@@ -101,7 +103,7 @@ fn minimax_recursive<B: Board<Error>>(
     board: &mut B,
     depth: usize,
     mut current_player: Player,
-    mut alpha: i32,
+    mut best_eval: i32
 ) -> i32 {
     if depth == 0 {
         return evaluate_board(board, current_player);
@@ -111,23 +113,17 @@ fn minimax_recursive<B: Board<Error>>(
         if board.is_valid(col).unwrap() {
             let mut board_copy = board.clone();
             if let Ok(_) = board_copy.make_move(col, current_player) {
-                let mut eval = -minimax_recursive(&mut board_copy, depth - 1, current_player.switch(), alpha);
+                let mut eval =
+                    -minimax_recursive(&mut board_copy, depth - 1, current_player.switch(), best_eval);
 
                 if board_copy.check_winner() {
                     eval -= 100000; // punish his ass because this bot is blind
                 }
-    
-                // update alpha (lower bound of possible scores)
-                alpha = alpha.max(eval);
-    
-                // prune useless branches
-                if alpha >= 10000 {
-                    return alpha; // it has already won
-                }
+
+                best_eval = best_eval.max(eval);
             }
         }
     }
-    
 
-    alpha // me fr
+    best_eval // me fr
 }

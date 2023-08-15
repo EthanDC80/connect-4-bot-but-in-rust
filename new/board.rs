@@ -1,14 +1,13 @@
+use crate::consts::{COLS, ROWS};
 use crate::player::Player;
-use crate::consts::{ROWS, COLS};
 use std::fmt::Display;
-
 
 /// Board Errors
 #[derive(Debug)]
 pub enum Error {
     InvalidColumn,
     InvalidRow,
-    FullColumn
+    FullColumn,
 }
 
 impl Display for Error {
@@ -16,13 +15,12 @@ impl Display for Error {
         match self {
             Error::InvalidColumn => write!(f, "Invalid column"),
             Error::InvalidRow => write!(f, "Invalid row"),
-            Error::FullColumn => write!(f, "Full column")
+            Error::FullColumn => write!(f, "Full column"),
         }
     }
 }
 
 impl std::error::Error for Error {}
-
 
 /// Board properties, useful for multiples implementations of board
 /// (Board is something that is often changed a lot during optimization, useful to have a trait)
@@ -37,18 +35,16 @@ pub trait Board<E>: Display + Copy + Clone {
     fn check_winner(&self) -> bool;
 }
 
-
-
 /// An actual implementation of a Board
 #[derive(Clone, Copy)]
 pub struct SimpleBoard {
-    board: [[Option<Player>; COLS]; ROWS]
+    board: [[Option<Player>; COLS]; ROWS],
 }
 
 impl Board<Error> for SimpleBoard {
     fn new() -> Self {
         Self {
-            board: [[None; COLS]; ROWS]
+            board: [[None; COLS]; ROWS],
         }
     }
 
@@ -80,13 +76,13 @@ impl Board<Error> for SimpleBoard {
         if col >= COLS {
             return Err(Error::InvalidColumn);
         }
-    
+
         for row in 0..ROWS {
             if self.get(row, col)? == None {
                 return Ok(true);
             }
         }
-        
+
         Ok(false)
     }
 
@@ -108,7 +104,7 @@ impl Board<Error> for SimpleBoard {
         // let mut streak = 0;
         // let mut prev_token = None;
         // let mut token;
-        
+
         for row in 0..ROWS {
             for col in 0..COLS - 3 {
                 let token = self.board[row][col];
@@ -122,7 +118,7 @@ impl Board<Error> for SimpleBoard {
                 }
             }
         }
-    
+
         // Vertical check
         for col in 0..COLS {
             for row in 0..ROWS - 3 {
@@ -137,7 +133,7 @@ impl Board<Error> for SimpleBoard {
                 }
             }
         }
-    
+
         // Diagonal check (bottom-left to top-right)
         for row in 0..ROWS - 3 {
             for col in 0..COLS - 3 {
@@ -152,7 +148,7 @@ impl Board<Error> for SimpleBoard {
                 }
             }
         }
-    
+
         // Diagonal check (top-left to bottom-right)
         for row in 3..ROWS {
             for col in 0..COLS - 3 {
@@ -167,7 +163,7 @@ impl Board<Error> for SimpleBoard {
                 }
             }
         }
-    
+           
         false
     }
 }

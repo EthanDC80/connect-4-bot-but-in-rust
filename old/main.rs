@@ -51,25 +51,37 @@ impl Connect4 {
         for row in 0..ROWS {
             for col in 0..COLS - 3 {
                 let token = self.board[row][col];
-                if token != '□' && self.board[row][col + 1] == token && self.board[row][col + 2] == token && self.board[row][col + 3] == token {
+                if token != '□'
+                    && self.board[row][col + 1] == token
+                    && self.board[row][col + 2] == token
+                    && self.board[row][col + 3] == token
+                {
                     return true;
                 }
             }
         }
-    
+
         for row in 0..ROWS - 3 {
             for col in 0..COLS {
                 let token = self.board[row][col];
-                if token != '□' && self.board[row + 1][col] == token && self.board[row + 2][col] == token && self.board[row + 3][col] == token {
+                if token != '□'
+                    && self.board[row + 1][col] == token
+                    && self.board[row + 2][col] == token
+                    && self.board[row + 3][col] == token
+                {
                     return true;
                 }
             }
         }
-    
+
         for row in 0..ROWS - 3 {
             for col in 0..COLS - 3 {
                 let token = self.board[row][col];
-                if token != '□' && self.board[row + 1][col + 1] == token && self.board[row + 2][col + 2] == token && self.board[row + 3][col + 3] == token {
+                if token != '□'
+                    && self.board[row + 1][col + 1] == token
+                    && self.board[row + 2][col + 2] == token
+                    && self.board[row + 3][col + 3] == token
+                {
                     return true;
                 }
             }
@@ -78,21 +90,23 @@ impl Connect4 {
         for row in 0..ROWS - 3 {
             for col in 3..COLS {
                 let token = self.board[row][col];
-                if token != '□' && self.board[row + 1][col - 1] == token && self.board[row + 2][col - 2] == token && self.board[row + 3][col - 3] == token {
+                if token != '□'
+                    && self.board[row + 1][col - 1] == token
+                    && self.board[row + 2][col - 2] == token
+                    && self.board[row + 3][col - 3] == token
+                {
                     return true;
                 }
             }
         }
-    
+
         false
     }
-    
 
     fn switch_player(&mut self) {
         if self.current_player == 'X' {
             self.current_player = 'O';
-        }
-        else {
+        } else {
             self.current_player = 'X';
         }
     }
@@ -121,8 +135,7 @@ impl Connect4 {
                         self.print_board();
                         println!("{} wins", self.current_player);
                         self.game_over = true;
-                    }
-                    else {
+                    } else {
                         self.switch_player();
                     }
                 }

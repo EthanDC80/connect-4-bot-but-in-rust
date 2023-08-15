@@ -4,7 +4,7 @@ mod minimax;
 mod player;
 
 use board::{Board, Error, SimpleBoard};
-use minimax::{minimax};
+use minimax::minimax;
 use player::Player;
 use std::io;
 
@@ -26,7 +26,7 @@ impl<B: Board<Error>> Connect4<B> {
     }
 
     fn find_best_move(&mut self) -> Option<usize> {
-        minimax(&mut self.board, 7, self.bot_player).1
+        minimax(&mut self.board, 8, self.bot_player).1
     }
 
     fn play(&mut self) {
@@ -52,8 +52,7 @@ impl<B: Board<Error>> Connect4<B> {
                 } else {
                     println!("Bot's move: No valid move available");
                 }
-            }
-            else {
+            } else {
                 println!("{}, (1-7):", self.current_player);
 
                 let mut input = String::new();
@@ -61,7 +60,7 @@ impl<B: Board<Error>> Connect4<B> {
                     .read_line(&mut input)
                     .expect("failed to read input");
 
-                let col: usize = match input.trim().parse(){
+                let col: usize = match input.trim().parse() {
                     Ok(col) => col,
                     Err(_) => {
                         println!("thats not a number dumbass");
